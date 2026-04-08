@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+import { useLocalizedContent } from '../i18n/content'
+
 type BookingFormValues = {
   departingFrom: string
   travelMonth: string
@@ -26,47 +29,50 @@ export function BookingForm({
   onChange,
   onSubmit,
 }: BookingFormProps) {
+  const { t } = useTranslation()
+  const { months, stayLengths } = useLocalizedContent()
+
   return (
     <section className="panel">
       <div className="section-heading">
-        <p className="eyebrow">Planning request</p>
-        <h2>Share the essentials so we can shape a trip outline that feels realistic.</h2>
+        <p className="eyebrow">{t('form.eyebrow')}</p>
+        <h2>{t('form.title')}</h2>
       </div>
 
       <p className="muted-copy">
-        Selected trip:{' '}
+        {t('form.selectedTrip')}{' '}
         <strong>
-          {selectedTripName ??
-            'No trip selected yet. Pick one of the cards above before submitting.'}
+          {selectedTripName ?? t('form.noTrip')}
         </strong>
       </p>
 
       <div className="form-grid">
         <label className="field">
-          <span>Departing from</span>
+          <span>{t('form.departingFrom')}</span>
           <input
             type="text"
             value={values.departingFrom}
             onChange={(event) => onChange('departingFrom', event.target.value)}
-            placeholder="New York, Toronto, or another major airport"
+            placeholder={t('form.departingPlaceholder')}
           />
         </label>
 
         <label className="field">
-          <span>Travel month</span>
+          <span>{t('form.travelMonth')}</span>
           <select
             value={values.travelMonth}
             onChange={(event) => onChange('travelMonth', event.target.value)}
           >
-            <option>September 2026</option>
-            <option>October 2026</option>
-            <option>November 2026</option>
-            <option>December 2026</option>
+            {months.map((month) => (
+              <option key={month.value} value={month.value}>
+                {month.label}
+              </option>
+            ))}
           </select>
         </label>
 
         <label className="field">
-          <span>How many travelers are joining?</span>
+          <span>{t('form.travelers')}</span>
           <input
             type="number"
             min="1"
@@ -77,23 +83,27 @@ export function BookingForm({
         </label>
 
         <label className="field">
-          <span>Approximate budget per traveler in USD</span>
+          <span>{t('form.budget')}</span>
           <input
             type="text"
             value={values.budget}
             onChange={(event) => onChange('budget', event.target.value)}
-            placeholder="For example, 1800"
+            placeholder={t('form.budgetPlaceholder')}
           />
         </label>
 
         <label className="field">
-          <span>Expected stay length</span>
-          <input
-            type="text"
+          <span>{t('form.stayLength')}</span>
+          <select
             value={values.stayLength}
             onChange={(event) => onChange('stayLength', event.target.value)}
-            placeholder="5 nights, 1 week, or 10 days"
-          />
+          >
+            {stayLengths.map((stayLength) => (
+              <option key={stayLength.value} value={stayLength.value}>
+                {stayLength.label}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="field checkbox-field">
@@ -102,21 +112,18 @@ export function BookingForm({
             checked={values.flexibleDates}
             onChange={(event) => onChange('flexibleDates', event.target.checked)}
           />
-          <span>I can shift my dates by a few days to find a better route or rate.</span>
+          <span>{t('form.flexibleDates')}</span>
         </label>
 
         <label className="field field--full">
-          <span>Trip notes or special requests</span>
+          <span>{t('form.notes')}</span>
           <textarea
             rows={4}
             value={values.notes}
             onChange={(event) => onChange('notes', event.target.value)}
-            placeholder="Examples: I prefer walkable neighborhoods, I need quiet mornings, or I want one memorable dinner reservation."
+            placeholder={t('form.notesPlaceholder')}
           />
-          <small>
-            Mention any priorities that would make the trip feel easier, calmer, or more
-            memorable.
-          </small>
+          <small>{t('form.notesHelp')}</small>
         </label>
       </div>
 
@@ -126,12 +133,12 @@ export function BookingForm({
         </p>
       ) : (
         <p className="form-message muted-copy">
-          Submit the form to generate a first-draft summary for your trip request.
+          {t('form.submitHint')}
         </p>
       )}
 
       <button type="button" className="primary-button" onClick={onSubmit}>
-        Generate booking summary
+        {t('form.submitButton')}
       </button>
     </section>
   )

@@ -1,54 +1,40 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BookingForm, type BookingFormValues } from '../components/BookingForm'
 import { BookingSummary } from '../components/BookingSummary'
 import { DestinationCard } from '../components/DestinationCard'
 import { FaqList } from '../components/FaqList'
 import { Hero } from '../components/Hero'
 import { TripFilters } from '../components/TripFilters'
-import { destinations, type TravelPace } from '../data/destinations'
-import { faqs } from '../data/faqs'
+import type { TravelPace } from '../data/destinations'
+import { useLocalizedContent } from '../i18n/content'
+import { filterDestinations } from '../lib/filterDestinations'
+import { firstValidationError } from '../lib/validateBookingForm'
 
 export function HomePage() {
+  const { t } = useTranslation()
+  const { destinations, faqs, homeSteps, getPaceLabel } = useLocalizedContent()
   const [query, setQuery] = useState('')
   const [selectedPace, setSelectedPace] = useState<'any' | TravelPace>('any')
-  const [selectedDestinationId, setSelectedDestinationId] = useState(destinations[0].id)
+  const [selectedDestinationId, setSelectedDestinationId] = useState(
+    destinations[0]?.id ?? '',
+  )
   const [errorMessage, setErrorMessage] = useState('')
   const [isSummaryReady, setIsSummaryReady] = useState(false)
   const [formValues, setFormValues] = useState<BookingFormValues>({
     departingFrom: '',
-    travelMonth: 'October 2026',
+    travelMonth: 'october2026',
     travelers: 2,
     budget: '1800',
-    stayLength: '7 nights',
+    stayLength: '7nights',
     notes: '',
     flexibleDates: true,
   })
 
-  const filteredDestinations = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
-
-    return destinations.filter((destination) => {
-      const matchesPace =
-        selectedPace === 'any' || destination.pace === selectedPace
-
-      const matchesQuery =
-        normalizedQuery.length === 0 ||
-        [
-          destination.name,
-          destination.country,
-          destination.bestFor,
-          destination.blurb,
-          destination.itineraryNote,
-          destination.pace,
-          ...destination.highlights,
-        ]
-          .join(' ')
-          .toLowerCase()
-          .includes(normalizedQuery)
-
-      return matchesPace && matchesQuery
-    })
-  }, [query, selectedPace])
+  const filteredDestinations = useMemo(
+    () => filterDestinations(destinations, { query, pace: selectedPace, getPaceLabel }),
+    [destinations, getPaceLabel, query, selectedPace],
+  )
 
   const selectedDestination =
     destinations.find((destination) => destination.id === selectedDestinationId) ?? null
@@ -64,31 +50,19 @@ export function HomePage() {
   }
 
   function handleSubmit() {
-    if (!selectedDestination) {
-      setErrorMessage('Please choose a trip before generating your booking summary.')
+    const error = firstValidationError(formValues, selectedDestination)
+    if (error) {
+      setErrorMessage(t(error.messageKey))
       setIsSummaryReady(false)
       return
     }
-
-    if (!formValues.departingFrom.trim()) {
-      setErrorMessage('Please add a departure city or airport so we can build your draft plan.')
-      setIsSummaryReady(false)
-      return
-    }
-
-    if (!formValues.budget.trim()) {
-      setErrorMessage('Please enter a budget so the summary can reflect your target price range.')
-      setIsSummaryReady(false)
-      return
-    }
-
     setErrorMessage('')
     setIsSummaryReady(true)
   }
 
   return (
     <div className="page-shell">
-      <Hero destinationCount={destinations.length} />
+      <Hero />
 
       <TripFilters
         query={query}
@@ -100,17 +74,14 @@ export function HomePage() {
 
       <section className="panel">
         <div className="section-heading">
-          <p className="eyebrow">Featured escapes</p>
-          <h2>Choose a destination and start shaping a trip that fits your pace and budget.</h2>
+          <p className="eyebrow">{t('home.featured.eyebrow')}</p>
+          <h2>{t('home.featured.title')}</h2>
         </div>
 
         {filteredDestinations.length === 0 ? (
           <div className="empty-state">
-            <h3>No trips match the current filters</h3>
-            <p>
-              Try a broader search term or switch the pace back to "Any pace works for me"
-              to see more destination options.
-            </p>
+            <h3>{t('home.featured.emptyTitle')}</h3>
+            <p>{t('home.featured.emptyText')}</p>
           </div>
         ) : (
           <div className="destination-grid">
@@ -153,32 +124,17 @@ export function HomePage() {
 
         <section className="panel">
           <div className="section-heading">
-            <p className="eyebrow">How it works</p>
-            <h2>Book with confidence, then refine the details with a travel specialist.</h2>
+            <p className="eyebrow">{t('home.howItWorks.eyebrow')}</p>
+            <h2>{t('home.howItWorks.title')}</h2>
           </div>
 
           <div className="checklist">
-            <article>
-              <h3>Pick a travel style</h3>
-              <p>
-                Start with the kind of trip you actually want: slow and restorative,
-                balanced with a few highlights, or packed with activity from the first day.
-              </p>
-            </article>
-            <article>
-              <h3>Share the practical details</h3>
-              <p>
-                Departure city, date window, budget, and trip length help us narrow the
-                right route before we get into hotel or dining preferences.
-              </p>
-            </article>
-            <article>
-              <h3>Use the summary as a first draft</h3>
-              <p>
-                Once you submit the form, the summary becomes a simple planning brief that
-                can be reviewed, adjusted, and turned into a more detailed itinerary.
-              </p>
-            </article>
+            {homeSteps.map((step) => (
+              <article key={step.title}>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+            ))}
           </div>
         </section>
       </section>

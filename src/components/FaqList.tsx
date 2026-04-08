@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { FaqItem } from '../data/faqs'
 
 type FaqListProps = {
@@ -5,11 +6,13 @@ type FaqListProps = {
 }
 
 export function FaqList({ items }: FaqListProps) {
+  const { t } = useTranslation()
+
   return (
     <section className="panel">
       <div className="section-heading">
-        <p className="eyebrow">Travel questions</p>
-        <h2>Common questions from travelers before they commit to a route.</h2>
+        <p className="eyebrow">{t('faq.eyebrow')}</p>
+        <h2>{t('faq.title')}</h2>
       </div>
 
       <div className="faq-list">

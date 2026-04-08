@@ -1,33 +1,28 @@
 import { HeroVisual } from './HeroVisual'
+import { useTranslation } from 'react-i18next'
 
-type HeroProps = {
-  destinationCount: number
-}
+export function Hero() {
+  const { t } = useTranslation()
 
-export function Hero({ destinationCount }: HeroProps) {
   return (
     <section className="hero-panel">
       <div className="hero-layout">
         <div className="hero-content">
-          <p className="eyebrow">Northstar Travel</p>
-          <h1>Plan a city break with curated routes, flexible pacing, and smarter defaults.</h1>
-          <p className="hero-copy">
-            Discover short escapes built around atmosphere, pacing, and practical logistics.
-            Compare destination styles, shape a planning request, and preview the kind of trip
-            summary a traveler would want before moving into the booking details.
-          </p>
-          <div className="hero-metrics" aria-label="Project highlights">
+          <p className="eyebrow">{t('hero.eyebrow')}</p>
+          <h1>{t('hero.title')}</h1>
+          <p className="hero-copy">{t('hero.copy')}</p>
+          <div className="hero-metrics" aria-label={t('common.highlightsAria')}>
             <div>
-              <strong>{destinationCount}</strong>
-              <span>featured destinations</span>
+              <strong>{t('hero.metrics.destinationsValue')}</strong>
+              <span>{t('hero.metrics.destinations')}</span>
             </div>
             <div>
-              <strong>3</strong>
-              <span>planning steps</span>
+              <strong>{t('hero.metrics.stepsValue')}</strong>
+              <span>{t('hero.metrics.steps')}</span>
             </div>
             <div>
-              <strong>48h</strong>
-              <span>average response window</span>
+              <strong>{t('hero.metrics.responseValue')}</strong>
+              <span>{t('hero.metrics.response')}</span>
             </div>
           </div>
         </div>
