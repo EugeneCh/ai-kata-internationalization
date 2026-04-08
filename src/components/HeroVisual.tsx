@@ -1,33 +1,18 @@
+import { useTranslation } from 'react-i18next'
+
 type HeroVisualProps = {
   variant: 'planner' | 'guides' | 'help'
 }
 
-const variantContent = {
-  planner: {
-    label: 'This week',
-    title: 'Plan preview',
-    subtitle: 'A compact trip snapshot before booking.',
-    items: ['Lisbon long weekend', '2 travelers', 'Balanced pace'],
-    footer: 'Best for walkable neighborhoods and easy evenings',
-  },
-  guides: {
-    label: 'Editor picks',
-    title: 'Guide notes',
-    subtitle: 'Short reminders that improve real travel days.',
-    items: ['Protect the first evening', 'Choose one anchor plan', 'Leave weather room'],
-    footer: 'Practical pacing usually beats over-scheduling',
-  },
-  help: {
-    label: 'Before you confirm',
-    title: 'Travel basics',
-    subtitle: 'A quick reference for policies and expectations.',
-    items: ['Price changes happen', 'Review cancellation terms', 'Check passport timing'],
-    footer: 'Clear language reduces booking mistakes',
-  },
-} as const
-
 export function HeroVisual({ variant }: HeroVisualProps) {
-  const content = variantContent[variant]
+  const { t } = useTranslation()
+  const content = t(`heroVisual.${variant}`, { returnObjects: true }) as {
+    label: string
+    title: string
+    subtitle: string
+    items: string[]
+    footer: string
+  }
 
   return (
     <aside className={`hero-visual hero-visual--${variant}`} aria-hidden="true">

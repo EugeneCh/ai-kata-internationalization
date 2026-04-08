@@ -1,4 +1,5 @@
 import type { TravelPace } from '../data/destinations'
+import { useTranslation } from 'react-i18next'
 
 type TripFiltersProps = {
   query: string
@@ -15,48 +16,45 @@ export function TripFilters({
   onPaceChange,
   resultCount,
 }: TripFiltersProps) {
+  const { t } = useTranslation()
+
   return (
     <section className="panel">
       <div className="section-heading">
-        <p className="eyebrow">Explore trips</p>
-        <h2>Browse destination ideas by mood, pace, and the kind of trip you want.</h2>
+        <p className="eyebrow">{t('filters.eyebrow')}</p>
+        <h2>{t('filters.title')}</h2>
       </div>
 
       <div className="filter-grid">
         <label className="field">
-          <span>Search destinations or travel style</span>
+          <span>{t('filters.searchLabel')}</span>
           <input
             type="search"
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
-            placeholder="Try 'food', 'slow', or 'city break'"
+            placeholder={t('filters.searchPlaceholder')}
           />
-          <small>
-            Search by destination name, country, or trip style to narrow the shortlist.
-          </small>
+          <small>{t('filters.searchHelp')}</small>
         </label>
 
         <label className="field">
-          <span>Preferred pace</span>
+          <span>{t('filters.paceLabel')}</span>
           <select
             value={selectedPace}
             onChange={(event) =>
               onPaceChange(event.target.value as 'any' | TravelPace)
             }
           >
-            <option value="any">Any pace works for me</option>
-            <option value="slow">Slow and restorative</option>
-            <option value="balanced">Balanced with planned highlights</option>
-            <option value="fast">Fast with lots of activity</option>
+            <option value="any">{t('common.pace.any')}</option>
+            <option value="slow">{t('common.pace.slow')}</option>
+            <option value="balanced">{t('common.pace.balanced')}</option>
+            <option value="fast">{t('common.pace.fast')}</option>
           </select>
-          <small>Pick the tempo that feels realistic for this trip.</small>
+          <small>{t('filters.paceHelp')}</small>
         </label>
       </div>
 
-      <p className="results-copy">
-        Showing {resultCount} itinerary option{resultCount === 1 ? '' : 's'} that match
-        the current filters.
-      </p>
+      <p className="results-copy">{t('filters.results', { count: resultCount })}</p>
     </section>
   )
 }
