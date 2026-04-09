@@ -9,7 +9,7 @@ npm run dev          # Start Vite dev server
 npm run build        # TypeScript check + production build
 npm run lint         # ESLint
 npm test             # Run Vitest (watch mode)
-npm run test:coverage  # Coverage report (enforced: 80% lines/functions/statements, 75% branches)
+npm run test:coverage  # Coverage report (enforced: 95% lines/functions/statements/branches)
 ```
 
 To run a single test file:
