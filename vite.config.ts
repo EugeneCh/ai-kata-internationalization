@@ -15,18 +15,19 @@ export default defineConfig({
       // 'lcov'  → for CI / external tools (Codecov, SonarQube, etc.)
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: './coverage',
+      include: [
+        'src/**',
+      ],
       exclude: [
         'src/test/**',
-        'src/main.tsx',
-        'src/App.tsx',
         '**/*.d.ts',
         'vite.config.ts',
       ],
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 75,
-        statements: 80,
+        lines: 95,
+        functions: 95,
+        branches: 95,
+        statements: 95,
       },
     },
   },
