@@ -94,7 +94,7 @@ describe('Hero', () => {
 
 describe('HeroVisual', () => {
   it('renders planner variant', async () => {
-    const { HeroVisual } = await import('./HeroVisual')
+    await import('./HeroVisual')
     // t returns the key; the component uses returnObjects so we need to return an object
     // The mock t returns a string, so the component will try to map string.items (undefined)
     // We need to handle this — override mock for returnObjects case
