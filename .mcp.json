@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "chrome-devtools-mcp@latest"]
+    },
+    "mcp-atlassian": {
+      "command": "uvx",
+      "args": ["mcp-atlassian"],
+      "env": {
+        "JIRA_URL": "https://jiraeu.epam.com",
+        "JIRA_USERNAME": "your_name@epam.com",
+        "JIRA_API_TOKEN": "your token",
+        "CONFLUENCE_URL": "https://kb.epam.com",
+        "CONFLUENCE_USERNAME": "your_name@epam.com",
+        "CONFLUENCE_API_TOKEN": "your token"
+      }
+    }
+  }
+}
