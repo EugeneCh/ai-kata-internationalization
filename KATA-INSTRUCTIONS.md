@@ -17,6 +17,8 @@
 7. Generate API tokens for Jira and Confluence (see PDF instruction)
 8. Fill in the corresponding fields in `.mcp.json`
 
+**GitHub Copilot users** — copy the MCP configuration from `.mcp.json` into `.vscode/mcp.json` (VS Code reads MCP servers from `.vscode/mcp.json`)
+
 ## References
 
 - **Jira ticket:** https://jiraeu.epam.com/browse/EPMGDLT-1565
